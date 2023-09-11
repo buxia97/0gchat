@@ -1,6 +1,8 @@
 <template>
   <div class="system">
-    <div class="system-menu">
+    <div class="system-menu-bg" @click="menuShow=false" :class="menuShow?'show':''"></div>
+    <div class="system-menu" :class="menuShow?'show':''">
+
       <div class="system-title">
         管理中心
       </div>
@@ -26,6 +28,9 @@
       </div>
     </div>
     <div class="system-concent">
+      <div class="system-wap-header">
+        <i class="el-icon-s-unfold" @click="menuShow=true"></i>管理中心
+      </div>
       <template v-if="type==0">
         <div class="system-chatList">
           <div class="sf-chatList-type">
@@ -169,6 +174,7 @@
   export default {
     data() {
       return {
+        menuShow:false,
         type:0,
         forbidden:"",
         options: [{

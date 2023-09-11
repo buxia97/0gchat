@@ -5,7 +5,7 @@
     </div>
     <div class="sf-main">
         <div class="sf-header">
-          <div class="user">
+          <div class="user" @click="userVisible=true">
             <el-image src="/avatar/1.jpg"></el-image>
           </div>
           <div class="tips">
@@ -42,6 +42,7 @@
           </div>
         </div>
         <div class="sf-concent">
+
           <template v-if="operateType==0">
             <div class="sf-chatList">
               <div class="sf-chatList-type">
@@ -52,7 +53,7 @@
                   <span>已关闭</span>
                 </div>
               </div>
-              <chatList/>
+              <chatList :chatList="chatList"/>
             </div>
             <div class="sf-chat">
               <chat/>
@@ -69,6 +70,23 @@
           </template>
         </div>
     </div>
+    <el-dialog
+      title="用户信息"
+      :visible.sync="userVisible"
+      width="330px">
+      <div class="userInfo">
+        <div class="userInfo-avatar">
+          <el-image src="/avatar/2.jfif"></el-image>
+        </div>
+        <div class="userInfo-name">
+          小黑子
+        </div>
+      </div>
+      <div slot="footer" class="userInfo-footer">
+        <el-button type="danger" size="medium" @click="deleteUser()">销毁用户</el-button>
+        <el-button type="primary" size="medium" @click="reloadUser()">重新生成</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,15 +96,39 @@ export default {
   data() {
     return {
       operateType:0,
-      chatList:null,
+      chatList:[],
       pageInterval:null,
+      userVisible:false
     }
+  },
+  computed: {
+    ...mapState({
+      curChat: state => state.curChat,
+      token: state => state.token,
+      userInfo: state => state.userInfo
+    })
   },
   created() {
     let that = this;
   },
   mounted(){
     let that = this;
+    if(localStorage.getItem("0gsf_userinfo")){
+      try{
+        var userInfo = localStorage.getItem("0gsf_userinfo");
+        userInfo = JSON.parse(userInfo);
+        that.$store.commit('setUserInfo', userInfo);
+      }catch(e){
+        that.$store.commit('setUserInfo', null);
+      	console.log(e);
+      }
+    }else{
+      that.$store.commit('setUserInfo', null);
+    }
+    if(localStorage.getItem("0gsf_token")){
+      var token = localStorage.getItem("0gsf_token");
+      that.$store.commit('setToken', token);
+    }
     that.pageInterval = setInterval(function(){
 
     }, 3000);
@@ -96,6 +138,14 @@ export default {
     	const that = this;
       that.operateType = type;
     },
+    deleteUser(){
+      const that = this;
+
+    },
+    reloadUser(){
+      const that = this;
+      
+    }
   }
 }
 </script>

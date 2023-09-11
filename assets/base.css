@@ -390,8 +390,8 @@ body{
   width: 100%;
 }
 .chatList-box-avatar{
-  height: 50px;
-  width: 50px;
+  height: 45px;
+  width: 45px;
   float: left;
   border-radius: 50%;
   overflow: hidden;
@@ -402,7 +402,7 @@ body{
   height: 100%;
 }
 .chatList-box-info{
-  width: calc(100% - 50px);
+  width: calc(100% - 45px);
   float: left;
   padding-top: 5px;
   padding-left: 10px;
@@ -594,7 +594,7 @@ body{
 }
 .sf-metas-title{
   font-size: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .about{
   width: 100%;
@@ -758,6 +758,28 @@ body{
 .chat-wap-header{
   display: none;
 }
+.system-wap-header{
+  display: none;
+}
+.system-menu-bg{
+  display: none;
+}
+.userInfo-footer{
+  text-align: center;
+}
+.userInfo-avatar{
+  text-align: center;
+}
+.userInfo-avatar .el-image{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+.userInfo-name{
+  text-align: center;
+  margin-top: 10px;
+  font-size: 18px;
+}
 @media screen and (max-width: 1230px){
   .sf-main{
     height: 100vh;
@@ -767,6 +789,14 @@ body{
   }
 }
 @media screen and (max-width: 960px){
+  .sf-header{
+    background: #fff;
+    z-index: 999;
+    border-bottom: #eee solid 1px;
+  }
+  .website a{
+    color: #000;
+  }
   .sf-operate{
     position: fixed;
     width: 100%;
@@ -811,6 +841,7 @@ body{
   .sf-header{
     height: 45px;
     line-height: 45px;
+    position: fixed;
   }
   .sf-header .tips{
     display: none;
@@ -922,6 +953,65 @@ body{
     height: 40px;
     line-height: 40px;
   }
+  .system-menu{
+    position: absolute;
+    transition: 0.3s all;
+    width: 200px;
+    left: -200px;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    border-right: #eee solid 1px;
+  }
+  .system-menu.show{
+    left: 0;
+  }
+  .system-menu-bg.show{
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index:50;
+    background: #000;
+    opacity: 0.4;
+  }
+  .system-concent{
+    width: 100%;
+  }
+  .system-chatList .chatList .chatList-box{
+    width: 100%;
+  }
+  .system-chatList{
+    padding: 10px;
+  }
+  .system-chatList .chatList{
+    padding-top: 80px;
+  }
+  .system-wap-header{
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 40px;
+    border-bottom: solid #f3f3f3 1px;
+    padding: 0px 15px;
+  }
+  .system-wap-header i{
+    font-size: 18px;
+    padding-right: 10px;
+  }
+  .system-chatList .sf-chatList-type{
+    top: 40px;
+    background: #fff;
+  }
+  .system-form,.system-ban,.system-send{
+    padding-top: 50px;
+  }
 }
 @media screen and (max-width: 760px){
   .sf-metas-box{
@@ -929,8 +1019,17 @@ body{
   }
 }
 @media screen and (max-width: 660px){
-    .msg-concen{
-      width: calc(100% - 50px);
-    }
-
+  .msg-concen{
+    width: calc(100% - 50px);
   }
+  .sf-metas-concent{
+    padding: 5px;
+  }
+  .sf-metas-box{
+    padding: 5px;
+  }
+  .about-concent{
+    padding: 20px;
+  }
+
+}

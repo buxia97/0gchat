@@ -49,7 +49,10 @@ export default {
       maxAge: 1000 * 60 * 10
     }]
   ],
-
+  server: {
+    host: '0.0.0.0',
+    port: 3000
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^element-ui/],
