@@ -1,5 +1,13 @@
 <template>
   <div class="chat">
+    <div class="chat-wap-header">
+        <i class="el-icon-arrow-left"></i>
+        <div class="chat-wap-title">测试的征文标题内容</div>
+        <div class="chat-wap-chat-avatar">
+          <el-image src="/avatar/2.jfif"></el-image>
+          <i class="el-icon-caret-bottom"></i>
+        </div>
+    </div>
     <div class="chat-header">
       <div class="chat-avatar">
         <el-image src="/avatar/2.jfif"></el-image>
