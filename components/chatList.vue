@@ -10,7 +10,7 @@
             测试的征文标题内容
           </div>
           <div class="chatList-box-value">
-            活跃度：1000
+            系统消息：已将XXX禁言
             <span class="chatList-box-time">30分钟前</span>
           </div>
         </div>
@@ -26,7 +26,7 @@
             测试的征文标题内容
           </div>
           <div class="chatList-box-value">
-            活跃度：1000
+            系统消息：已将XXX禁言
             <span class="chatList-box-time">30分钟前</span>
           </div>
         </div>
@@ -42,7 +42,7 @@
             测试的征文标题内容
           </div>
           <div class="chatList-box-value">
-            活跃度：1000
+            系统消息：已将XXX禁言
             <span class="chatList-box-time">30分钟前</span>
           </div>
         </div>

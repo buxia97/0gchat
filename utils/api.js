@@ -1,13 +1,52 @@
 
 
 module.exports = {
+  sendMsg:function(){
+  	return process.env.baseUrl + 'chatMsg/sendMsg';
+  },
+  sendSystemMsg:function(){
+  	return process.env.baseUrl + 'chatMsg/sendSystemMsg';
+  },
+  msgDelete:function(){
+  	return process.env.baseUrl + 'chatMsg/msgDelete';
+  },
+  banUser:function(){
+  	return process.env.baseUrl + 'chatMsg/banUser';
+  },
+  msgList:function(){
+  	return process.env.baseUrl + 'chatMsg/msgList';
+  },
+  lastMsgs:function(){
+  	return process.env.baseUrl + 'chatMsg/lastMsgs';
+  },
 
-  userLogin:function(){
-  	return process.env.baseUrl + 'typechoUsers/userLogin';
+  chatAdd:function(){
+  	return process.env.baseUrl + 'chatChat/chatAdd';
   },
-  phoneLogin:function(){
-  	return process.env.baseUrl + 'typechoUsers/phoneLogin';
+  chatUpdate:function(){
+  	return process.env.baseUrl + 'chatChat/chatUpdate';
   },
+  chatDelete:function(){
+  	return process.env.baseUrl + 'chatChat/chatDelete';
+  },
+  chatList:function(){
+  	return process.env.baseUrl + 'chatChat/chatList';
+  },
+  
+  isToken:function(){
+  	return process.env.baseUrl + 'chatConfigs/isToken';
+  },
+  configsUpdate:function(){
+  	return process.env.baseUrl + 'chatConfigs/configsUpdate';
+  },
+  
+  banList:function(){
+  	return process.env.baseUrl + 'chatConfigs/banList';
+  },
+  banDelete:function(){
+  	return process.env.baseUrl + 'chatConfigs/banDelete';
+  },
+
   removeObjectEmptyKey(json) {
       var value;
       for (var key in json) {

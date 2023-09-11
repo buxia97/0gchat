@@ -16,41 +16,57 @@
           </div>
         </div>
         <div class="sf-operate">
-          <div class="sf-operate-box cur">
+          <div class="sf-operate-box" :class="operateType==0?'cur':''" @click="setType(0)">
             <div class="sf-operate-main">
               <i class="el-icon-s-comment"></i>
               频道
             </div>
           </div>
-          <div class="sf-operate-box">
+          <div class="sf-operate-box" :class="operateType==1?'cur':''" @click="setType(1)">
             <div class="sf-operate-main">
               <i class="el-icon-s-promotion"></i>
-              QQ群
+              社交
             </div>
           </div>
-          <div class="sf-operate-box">
+          <div class="sf-operate-box" :class="operateType==2?'cur':''" @click="setType(2)">
             <div class="sf-operate-main">
               <i class="el-icon-question"></i>
               关于
             </div>
           </div>
+          <div class="sf-operate-box" :class="operateType==3?'cur':''" @click="setType(3)">
+            <div class="sf-operate-main">
+              <i class="el-icon-menu"></i>
+              管理
+            </div>
+          </div>
         </div>
         <div class="sf-concent">
-
-          <div class="sf-chatList">
-            <div class="sf-chatList-type">
-              <div class="sf-chatList-type-box cur">
-                <span>进行中</span>
+          <template v-if="operateType==0">
+            <div class="sf-chatList">
+              <div class="sf-chatList-type">
+                <div class="sf-chatList-type-box cur">
+                  <span>进行中</span>
+                </div>
+                <div class="sf-chatList-type-box">
+                  <span>已关闭</span>
+                </div>
               </div>
-              <div class="sf-chatList-type-box">
-                <span>已关闭</span>
-              </div>
+              <chatList/>
             </div>
-            <chatList/>
-          </div>
-          <div class="sf-chat">
-            <chat/>
-          </div>
+            <div class="sf-chat">
+              <chat/>
+            </div>
+          </template>
+          <template v-if="operateType==1">
+            <metas/>
+          </template>
+          <template v-if="operateType==2">
+            <about/>
+          </template>
+          <template v-if="operateType==3">
+            <system/>
+          </template>
         </div>
     </div>
   </div>
@@ -58,6 +74,28 @@
 
 <script>
 export default {
-  name: 'IndexPage'
+  name: 'index',
+  data() {
+    return {
+      operateType:0,
+      chatList:null,
+      pageInterval:null,
+    }
+  },
+  created() {
+    let that = this;
+  },
+  mounted(){
+    let that = this;
+    that.pageInterval = setInterval(function(){
+
+    }, 3000);
+  },
+  methods: {
+    setType(type){
+    	const that = this;
+      that.operateType = type;
+    },
+  }
 }
 </script>
