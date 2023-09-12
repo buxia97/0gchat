@@ -7,7 +7,7 @@
     <div class="chatList-box" v-for="(item,index) in chatList" @click="goChat(item)">
       <div class="chatList-box-main">
         <div class="chatList-box-avatar">
-          <el-image :src="item.pic"></el-image>
+          <el-image :src="'/chatAvatar/'+item.pic+'.jpg'"></el-image>
         </div>
         <div class="chatList-box-info">
           <div class="chatList-box-name">

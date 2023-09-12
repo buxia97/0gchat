@@ -1,5 +1,11 @@
 <template>
   <div class="sf">
+    <div class="page-unloaded" v-if="!isLoaded">
+      <div class="page-unloaded-main">
+        <p>作者匿名聊天室</p>
+        <i class="el-icon-loading"></i>
+      </div>
+    </div>
     <div class="sf-bg">
       <el-image src="/bg.jpg" fit="cover"></el-image>
     </div>
@@ -12,6 +18,7 @@
       </div>
       <div class="noUser-welcome">
         欢迎来到作者匿名讨论区，请点击下方按钮，确认随机生成的匿名账户，开始进行愉快的讨♂论吧！
+
       </div>
       <div class="userInfo" v-if="beforUserInfo!=null">
         <div class="userInfo-avatar">
@@ -25,6 +32,7 @@
         <el-button type="success" size="small" @click="confirmUser()">确认用户</el-button>
         <el-button type="primary" size="small" @click="reloadUser()">重新生成</el-button>
       </div>
+      <p class="noUser-tips">请遵守法律法规，讨论写作话题。</p>
     </div>
     <div class="sf-main" v-else>
         <div class="sf-header">
@@ -38,7 +46,7 @@
             <a href="https://www.0gsf.com/" target="_blank"><i class="el-icon-link"></i>零重力科幻</a>
           </div>
         </div>
-        <div class="sf-operate">
+        <div class="sf-operate" :class="token!=''?'haveSystem':''">
           <div class="sf-operate-box" :class="operateType==0?'cur':''" @click="setType(0)">
             <div class="sf-operate-main">
               <i class="el-icon-s-comment"></i>
@@ -57,7 +65,7 @@
               关于
             </div>
           </div>
-          <div class="sf-operate-box" :class="operateType==3?'cur':''" @click="setType(3)">
+          <div class="sf-operate-box" :class="operateType==3?'cur':''" @click="setType(3)" v-if="token!=''">
             <div class="sf-operate-main">
               <i class="el-icon-menu"></i>
               管理
@@ -76,9 +84,10 @@
                   <span>已关闭</span>
                 </div>
               </div>
+              
               <chatList :chatList="chatList"/>
             </div>
-            <div class="sf-chat">
+            <div class="sf-chat" :class="curChat!=0?'show':''">
               <template v-if="curChat==0">
                 <div class="sf-chat-no">
                   <div class="sf-chat-no-concent">
@@ -137,6 +146,7 @@ export default {
       beforUserInfo:null,
 
       curChatInfo:null,
+      isLoaded:false,
     }
   },
   computed: {
@@ -149,8 +159,17 @@ export default {
   created() {
     let that = this;
   },
+  beforeDestroy(){
+    let that = this;
+    clearInterval(that.pageInterval);
+    that.pageInterval = null;
+  },
   mounted(){
     let that = this;
+    if(that.$route.query.token){
+      var token = that.$route.query.token;
+      that.isToken(token);
+    }
     if(localStorage.getItem("0gsf_userinfo")){
       try{
         var userInfo = localStorage.getItem("0gsf_userinfo");
@@ -171,10 +190,20 @@ export default {
       that.reloadUser();
     }else{
       that.getChatList();
+      //销毁定时器（管够）
+      that.$once('hook:beforeDestroy', () => {
+        clearInterval(that.pageInterval);
+        that.pageInterval = null;
+      })
+      clearInterval(that.pageInterval);
+      that.pageInterval = null;
       that.pageInterval = setInterval(function(){
-
+        if(that.operateType==0&&that.chatStatus==1){
+          that.getChatList();
+        }
       }, 3000);
     }
+    that.isLoaded = true;
 
   },
   methods: {
@@ -220,12 +249,12 @@ export default {
     generateRandomString(length) {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let randomString = '';
-    
+
       for (let i = 0; i < length; i++) {
         const randomIndex = Math.floor(Math.random() * characters.length);
         randomString += characters.charAt(randomIndex);
       }
-    
+
       return randomString;
     },
     getChatList(){
@@ -255,7 +284,34 @@ export default {
           type: 'error'
         })
       })
-    }
+    },
+    isToken(token){
+      const that = this;
+      var data = {
+      	"token":token,
+      }
+      that.$axios.$post(that.$api.isToken(),this.qs.stringify(data),{progress: false }).then(function (res) {
+        if(res.code==1){
+          that.$message({
+            message: "欢迎您，管理员！",
+            type: 'success'
+          })
+          that.$store.commit('setToken', token);
+        }else{
+          that.$message({
+            message: "Token不正确",
+            type: 'error'
+          })
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+        that.$message({
+          message: "接口请求异常，请检查网络！",
+          type: 'error'
+        })
+      })
+    },
   }
 }
 </script>

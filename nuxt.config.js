@@ -1,14 +1,14 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: '作者匿名讨论区 - 零重力科幻',
+    title: '作者匿名讨论区',
     htmlAttrs: {
       lang: 'zh'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '作者匿名讨论区，是零重力科幻用于每月征文活动的投票阶段讨论应用，帮助参赛作者在不暴露身份前提对参赛作品进行评论和探讨。' },
+      { hid: 'description', name: 'description', content: '作者匿名讨论区，是用于每月征文活动的投票阶段讨论应用，帮助参赛作者在不暴露身份前提对参赛作品进行评论和探讨。' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
