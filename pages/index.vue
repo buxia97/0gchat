@@ -3,10 +3,33 @@
     <div class="sf-bg">
       <el-image src="/bg.jpg" fit="cover"></el-image>
     </div>
-    <div class="sf-main">
+    <div class="noUser" v-if="userInfo==null">
+      <div class="noUser-title">
+        作者匿名聊天室
+      </div>
+      <div class="noUser-version">
+        v1.0 beta
+      </div>
+      <div class="noUser-welcome">
+        欢迎来到零重力科幻作者匿名讨论区，请点击下方按钮，确认随机生成的匿名账户，开始进行愉快的讨♂论吧！
+      </div>
+      <div class="userInfo" v-if="beforUserInfo!=null">
+        <div class="userInfo-avatar">
+          <el-image :src="'/avatar/'+beforUserInfo.avatar+'.webp'"></el-image>
+        </div>
+        <div class="userInfo-name">
+          {{beforUserInfo.userName}}
+        </div>
+      </div>
+      <div class="userInfo-footer">
+        <el-button type="success" size="small" @click="confirmUser()">确认用户</el-button>
+        <el-button type="primary" size="small" @click="reloadUser()">重新生成</el-button>
+      </div>
+    </div>
+    <div class="sf-main" v-else>
         <div class="sf-header">
           <div class="user" @click="userVisible=true">
-            <el-image src="/avatar/1.jpg"></el-image>
+            <el-image :src="'/avatar/'+userInfo.avatar+'.webp'"></el-image>
           </div>
           <div class="tips">
             本平台为纯公益项目，请遵守国家法律，禁止发布违法违规内容
@@ -74,23 +97,23 @@
       title="用户信息"
       :visible.sync="userVisible"
       width="330px">
-      <div class="userInfo">
+      <div class="userInfo" v-if="userInfo!=null">
         <div class="userInfo-avatar">
-          <el-image src="/avatar/2.jfif"></el-image>
+          <el-image :src="'/avatar/'+userInfo.avatar+'.webp'"></el-image>
         </div>
         <div class="userInfo-name">
-          小黑子
+          {{userInfo.userName}}
         </div>
       </div>
       <div slot="footer" class="userInfo-footer">
         <el-button type="danger" size="medium" @click="deleteUser()">销毁用户</el-button>
-        <el-button type="primary" size="medium" @click="reloadUser()">重新生成</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'index',
   data() {
@@ -98,7 +121,9 @@ export default {
       operateType:0,
       chatList:[],
       pageInterval:null,
-      userVisible:false
+      userVisible:false,
+
+      beforUserInfo:null,
     }
   },
   computed: {
@@ -129,6 +154,9 @@ export default {
       var token = localStorage.getItem("0gsf_token");
       that.$store.commit('setToken', token);
     }
+    if(that.userInfo == null){
+      that.reloadUser();
+    }
     that.pageInterval = setInterval(function(){
 
     }, 3000);
@@ -140,11 +168,30 @@ export default {
     },
     deleteUser(){
       const that = this;
-
+      localStorage.removeItem("0gsf_userinfo");
+      that.$store.commit('setUserInfo', null);
+      that.userVisible = false;
+      that.reloadUser();
     },
     reloadUser(){
       const that = this;
-      
+      var nameList = that.$api.getNameList();
+      var randNameIndex = Math.floor(Math.random() * 50);
+      var userName = nameList[randNameIndex];
+      var randAvatarIndex = Math.floor(Math.random() * 50);
+      var avatar = randAvatarIndex;
+      var userInfo = {
+        "userName":userName,
+        "avatar":avatar
+      }
+      that.beforUserInfo = userInfo;
+    },
+    confirmUser(){
+      const that = this;
+      var userInfo = that.beforUserInfo;
+      localStorage.setItem("0gsf_userinfo",JSON.stringify(userInfo));
+      that.$store.commit('setUserInfo', userInfo);
+      that.beforUserInfo = null;
     }
   }
 }
