@@ -11,7 +11,7 @@
         v1.0 beta
       </div>
       <div class="noUser-welcome">
-        欢迎来到零重力科幻作者匿名讨论区，请点击下方按钮，确认随机生成的匿名账户，开始进行愉快的讨♂论吧！
+        欢迎来到作者匿名讨论区，请点击下方按钮，确认随机生成的匿名账户，开始进行愉快的讨♂论吧！
       </div>
       <div class="userInfo" v-if="beforUserInfo!=null">
         <div class="userInfo-avatar">
@@ -69,17 +69,28 @@
           <template v-if="operateType==0">
             <div class="sf-chatList">
               <div class="sf-chatList-type">
-                <div class="sf-chatList-type-box cur">
+                <div class="sf-chatList-type-box" :class="chatStatus==1?'cur':''" @click="setChatStatus(1)">
                   <span>进行中</span>
                 </div>
-                <div class="sf-chatList-type-box">
+                <div class="sf-chatList-type-box" :class="chatStatus==0?'cur':''" @click="setChatStatus(0)">
                   <span>已关闭</span>
                 </div>
               </div>
               <chatList :chatList="chatList"/>
             </div>
             <div class="sf-chat">
-              <chat/>
+              <template v-if="curChat==0">
+                <div class="sf-chat-no">
+                  <div class="sf-chat-no-concent">
+                    <i class="el-icon-chat-line-square"></i>
+                    <p>暂无进行中聊天</p>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <chat :chatId="curChat" :chatInfo="curChatInfo"/>
+              </template>
+
             </div>
           </template>
           <template v-if="operateType==1">
@@ -120,10 +131,12 @@ export default {
     return {
       operateType:0,
       chatList:[],
+      chatStatus:1,
       pageInterval:null,
       userVisible:false,
-
       beforUserInfo:null,
+
+      curChatInfo:null,
     }
   },
   computed: {
@@ -156,10 +169,13 @@ export default {
     }
     if(that.userInfo == null){
       that.reloadUser();
-    }
-    that.pageInterval = setInterval(function(){
+    }else{
+      that.getChatList();
+      that.pageInterval = setInterval(function(){
 
-    }, 3000);
+      }, 3000);
+    }
+
   },
   methods: {
     setType(type){
@@ -176,13 +192,15 @@ export default {
     reloadUser(){
       const that = this;
       var nameList = that.$api.getNameList();
-      var randNameIndex = Math.floor(Math.random() * 50);
+      var randNameIndex = Math.floor(Math.random() * nameList.length);
       var userName = nameList[randNameIndex];
-      var randAvatarIndex = Math.floor(Math.random() * 50);
+      var randAvatarIndex = Math.floor(Math.random() * 80);
       var avatar = randAvatarIndex;
+      var userKey = that.generateRandomString(10);
       var userInfo = {
         "userName":userName,
-        "avatar":avatar
+        "avatar":avatar,
+        "userKey":userKey,
       }
       that.beforUserInfo = userInfo;
     },
@@ -192,6 +210,51 @@ export default {
       localStorage.setItem("0gsf_userinfo",JSON.stringify(userInfo));
       that.$store.commit('setUserInfo', userInfo);
       that.beforUserInfo = null;
+    },
+    setChatStatus(type){
+      const that = this;
+      that.chatStatus = type;
+      that.chatList = [];
+      that.getChatList();
+    },
+    generateRandomString(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let randomString = '';
+    
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        randomString += characters.charAt(randomIndex);
+      }
+    
+      return randomString;
+    },
+    getChatList(){
+      const that = this;
+      var chatStatus = that.chatStatus;
+      var params = {
+      	"status":chatStatus
+      }
+      var data = {
+      	"searchParams":JSON.stringify(that.$api.removeObjectEmptyKey(params)),
+      	"limit":20,
+      }
+      that.$axios.$post(that.$api.chatList(),this.qs.stringify(data),{progress: false }).then(function (res) {
+        if(res.code==1){
+          var list = res.data;
+          if(list.length>0){
+        		that.chatList = list;
+        	}else{
+        		that.chatList = [];
+        	}
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+        that.$message({
+          message: "接口请求异常，请检查网络！",
+          type: 'error'
+        })
+      })
     }
   }
 }

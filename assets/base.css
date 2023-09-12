@@ -546,6 +546,7 @@ body{
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
+  display: inline-block;
 }
 .msg-box.my .msg-text{
   background:#cee4ff;
@@ -817,6 +818,68 @@ body{
 }
 .noUser .userInfo-footer{
   margin-top: 15px;
+}
+.data-no{
+  padding: 50px 0px;
+  text-align: center;
+  color: #999;
+}
+.data-no i{
+  font-size: 30px;
+  display: block;
+  margin-bottom: 10px;
+}
+.data-no p{
+  font-size: 12px;
+}
+.sf-chat-no{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.sf-chat-no-concent{
+  color: #999;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 30%;
+}
+.sf-chat-no-concent i{
+  font-size: 45px;
+  display: block;
+  margin-bottom: 15px;
+}
+.chat-msg-loading{
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  position: relative;
+}
+.chat-msg-loading-main{
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 45%;
+}
+.chat-msg-loading-main i{
+  font-size: 40px;
+  color: #0081ff;
+}
+.chatList-box-lastMsg{
+  color: #666;
+}
+.chatList-box-lastMsg {
+  color: #666;
+  display: inline-block;
+  float: left;
+  width: calc(100% - 55px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chatList-box-lastMsg.sysMsg{
+  color: #0081ff;
 }
 @media screen and (max-width: 1230px){
   .sf-main{

@@ -1,47 +1,79 @@
 <template>
   <div class="msg">
-    <div class="msg-box">
+    <el-scrollbar style="height: 100%;" ref="msgScroll">
+    <div class="msg-box" v-for="(item,index) in msgList" :class="userKey==item.userKey?'my':''">
       <div class="msg-main">
         <div class="msg-avatar">
-          <el-image src="/avatar/1.jpg"></el-image>
+          <el-image :src="'/avatar/'+item.avatar+'.webp'"></el-image>
         </div>
         <div class="msg-concent">
           <div class="msg-concent-value">
-            <span class="mag-userName">菜鸟</span>
-            <span class="mag-postTime">2023/09/11 0:13</span>
+            <span class="mag-userName">{{item.userName}}</span>
+            <span class="mag-postTime">{{formatDate(item.created)}}</span>
           </div>
           <div class="msg-concent-text">
             <!--判断消息类型-->
-            <div class="msg-text">
-              我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。我觉得还是很有意思的。
+            <div class="msg-text" v-html="replaceNewlinesWithBr(item.text)">
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="msg-box my">
-      <div class="msg-main">
-        <div class="msg-avatar">
-          <el-image src="/avatar/1.jpg"></el-image>
-        </div>
-        <div class="msg-concent">
-          <div class="msg-concent-value">
-            <span class="mag-userName">小白</span>
-            <span class="mag-postTime">2023/09/11 0:13</span>
-          </div>
-          <div class="msg-concent-text">
-            <!--判断消息类型-->
-            <div class="msg-text">
-              这是我发布的消息。这是我发布的消息。这是我发布的消息。这是我发布的消息。这是我发布的消息。这是我发布的消息。
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </el-scrollbar>
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+  export default {
+    props: {
+        msgList: {
+            type: Array,
+            default: () => []
+        }
+    },
+    data() {
+      return {
+        userKey:null,
+      }
+    },
+    computed: {
+      ...mapState({
+        userInfo: state => state.userInfo
+      })
+    },
+    watch: {
+      userInfo(newValue, oldValue){
+        const that = this;
+         if(that.userInfo!=null){
+           that.userKey = that.userInfo.userKey;
+         }
+      }
+    },
+    mounted() {
+      let that = this;
+      if(that.userInfo!=null){
+        that.userKey = that.userInfo.userKey;
+      }
+
+    },
+    methods: {
+      formatDate(datetime) {
+      	var datetime = new Date(parseInt(datetime * 1000));
+      	var year = datetime.getFullYear(),
+      		month = ("0" + (datetime.getMonth() + 1)).slice(-2),
+      		date = ("0" + datetime.getDate()).slice(-2),
+      		hour = ("0" + datetime.getHours()).slice(-2),
+      		minute = ("0" + datetime.getMinutes()).slice(-2);
+      	var result = year + "-" + month + "-" + date + " " + hour + ":" + minute;
+      	return result;
+      },
+      replaceNewlinesWithBr(text) {
+        return text.replace(/\n/g, '<br>');
+      }
+    },
+
+  }
 </script>
 
 <style>
