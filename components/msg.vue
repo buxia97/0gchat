@@ -11,20 +11,36 @@
             <div class="msg-concent-value">
               <span class="mag-userName">{{item.userName}}</span>
               <span class="mag-postTime">{{formatDate(item.created)}}</span>
-
+              <span class="reply" @click="reply(item)">回复</span>
             </div>
             <div class="msg-concent-text">
               <!--判断消息类型-->
               <template v-if="item.type==0">
                 <div class="msg-text" v-html="replaceNewlinesWithBr(item.text)">
                 </div>
+
               </template>
               <template v-if="item.type==3">
                 <div class="msg-text">
                     <a :href="item.url"><i class="el-icon-link"></i>{{item.text}}</a>
                 </div>
-              </template>
 
+              </template>
+              <div class="msg-reply" v-if="item.replyJSon&&item.type==0">
+                <div class="reply-text">
+                  <template v-if="item.replyJSon.isDeleted==1">
+                    消息已删除
+                  </template>
+                  <template v-else>
+                    <template v-if="item.replyJSon.type==0">
+                      {{item.replyJSon.text}}
+                    </template>
+                    <template v-if="item.replyJSon.type==3">
+                     <a :href="item.url"><i class="el-icon-link"></i>{{item.text}}</a>
+                    </template>
+                  </template>
+                </div>
+              </div>
               <div class="msg-system-btn" v-if="token!=''">
                 <span @click="banIp(item)">封禁</span>
                 <span @click="deleteMsg(item.id)">删除</span>
@@ -59,6 +75,7 @@
     data() {
       return {
         userKey:null,
+
       }
     },
     computed: {
@@ -140,7 +157,50 @@
         });
       },
       deleteMsg(id){
+          const that = this;
+        that.$confirm('确认要删除该消息吗？', '操作提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          var data = {
+          	"key":id,
+          	"token":that.token,
+          }
+          const loading = this.$loading({
+            lock: true,
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
+          that.$axios.$post(that.$api.msgDelete(),this.qs.stringify(data),{progress: false }).then(function (res) {
+            loading.close();
+            if(res.code==1){
+              that.$message({
+                message:"操作成功！",
+                type: 'success'
+              })
+            }else{
+              that.$message({
+                message:res.msg,
+                type: 'error'
+              })
+            }
+          })
+          .catch(function (error) {
+            loading.close();
+            console.log(error)
+            that.$message({
+              message: "接口请求异常，请检查网络！",
+              type: 'error'
+            })
+          })
+        }).catch(() => {
 
+        });
+      },
+      reply(item){
+        const that = this;
+        that.$parent.replyJson = item;
       }
     },
 

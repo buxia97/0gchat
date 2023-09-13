@@ -36,7 +36,7 @@
     </div>
     <div class="sf-main" v-else>
         <div class="sf-header">
-          <div class="user" @click="userVisible=true">
+          <div class="user" @click="userVisible=true" v-if="userInfo!=null">
             <el-image :src="'/avatar/'+userInfo.avatar+'.webp'"></el-image>
           </div>
           <div class="tips">
@@ -84,7 +84,7 @@
                   <span>已关闭</span>
                 </div>
               </div>
-              
+
               <chatList :chatList="chatList"/>
             </div>
             <div class="sf-chat" :class="curChat!=0?'show':''">
@@ -239,6 +239,7 @@ export default {
       localStorage.setItem("0gsf_userinfo",JSON.stringify(userInfo));
       that.$store.commit('setUserInfo', userInfo);
       that.beforUserInfo = null;
+      that.getChatList();
     },
     setChatStatus(type){
       const that = this;

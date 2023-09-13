@@ -38,6 +38,15 @@
        <msg :msgList="msgList" ref="msg"/>
       </template>
     </div>
+    <div class="reply-main" v-if="replyJson!=null">
+
+      <div class="reply-main-text">
+        {{replyJson.userName}} : {{replyJson.text}}
+      </div>
+      <div class="reply-main-close" @click="replyJson=null">
+        <i class="el-icon-close"></i>
+      </div>
+    </div>
     <div class="chat-input">
       <template v-if="chatInfo.status==0">
         <div class="chat-input-close">
@@ -107,12 +116,14 @@
         lastTime:0,
         msgInterval:null,
         linksVisible:false,
+        Loadlock:0,
         linkForm:{
           "name":"",
           "url":""
         },
         isShow:false,
         isSysMsg:0,
+        replyJson:null,
       }
     },
     computed: {
@@ -258,10 +269,14 @@
         params.chatid = that.chatId;
         params.text = that.msg;
         params.type = 0;
+        if(that.replyJson!=null){
+          params.reply = that.replyJson.id;
+        }
         var data = {
         	"params":JSON.stringify(that.$api.removeObjectEmptyKey(params)),
         }
         that.msg = "";
+        that.replyJson = null;
         that.$axios.$post(that.$api.sendMsg(),this.qs.stringify(data),{progress: false }).then(function (res) {
           if(res.code==1){
             that.getLastMsgs();
@@ -287,6 +302,12 @@
       },
       getMsgList(){
         const that = this;
+        //加载锁，上一次请求未加载完则不加载下一个
+        if(that.Loadlock==1){
+          return false;
+        }else{
+          that.Loadlock=1;
+        }
         var params = {
         	"chatid":that.chatId
         }
@@ -295,7 +316,9 @@
         	"limit":800,
         }
         that.$axios.$post(that.$api.msgList(),this.qs.stringify(data),{progress: false }).then(function (res) {
+          that.Loadlock=0;
           if(res.code==1){
+
             var list = res.data;
 
             if(list.length>0){
@@ -314,6 +337,7 @@
           }
         })
         .catch(function (error) {
+          that.Loadlock=0;
           console.log(error)
           that.$message({
             message: "接口请求异常，请检查网络！",
@@ -323,11 +347,18 @@
       },
       getLastMsgs(){
         const that = this;
+        //加载锁，上一次请求未加载完则不加载下一个
+        if(that.Loadlock==1){
+          return false;
+        }else{
+          that.Loadlock=1;
+        }
         var data = {
         	"chatid":that.chatId,
           "time":that.lastTime
         }
         that.$axios.$post(that.$api.lastMsgs(),this.qs.stringify(data),{progress: false }).then(function (res) {
+          that.Loadlock=0;
           if(res.code==1){
             var list = res.data;
 
@@ -360,6 +391,7 @@
           }
         })
         .catch(function (error) {
+          that.Loadlock=0;
           console.log(error)
           that.$message({
             message: "接口请求异常，请检查网络！",

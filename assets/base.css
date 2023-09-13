@@ -997,6 +997,61 @@ body{
   color: #F56C6C;
   cursor: pointer;
 }
+.msg .el-scrollbar__wrap{
+  overflow-x: hidden;
+}
+.msg-concent-text .reply-text{
+  background: rgba(0,0,0,0.2);
+  color: #fff;
+  padding: 3px 10px;
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-top: 5px;
+  max-width: 100%;
+}
+.msg-concent-value .reply{
+  margin-left: 5px;
+  cursor: pointer;
+  display: none;
+}
+.msg-box:hover .msg-concent-value .reply{
+  display: inline;
+}
+.reply-main{
+  background: #d9ecff;
+  width: calc(100% - 30px);
+  position: absolute;
+  z-index: 150;
+  color: #666;
+  bottom: 155px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  left: 15px;
+  overflow: hidden;
+}
+.reply-main-text{
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  width: calc(100% - 50px);
+  line-height: 18px;
+  font-size: 13px;
+  float: left;
+  -webkit-box-orient: vertical;
+}
+.reply-main-close{
+  width: 50px;
+  float: left;
+  text-align: right;
+  line-height: 18px;
+}
+.reply-main-close i{
+  font-size: 18px;
+  color: #333;
+}
 @media screen and (max-width: 1230px){
   .sf-main{
     height: 100vh;
@@ -1116,6 +1171,23 @@ body{
     padding: 10px 15px;
     height: 100px;
     border-top: solid 1px #f3f3f3;
+    position: fixed;
+    z-index: 999;
+    left: auto;
+    right: -100%;
+    transition: 0.3s all;
+  }
+  .reply-main{
+    bottom: 105px;
+    position: fixed;
+    z-index: 888;
+  }
+  .msg .el-scrollbar__view{
+    padding-bottom: 90px;
+  }
+
+  .sf-chat.show .chat-input{
+    right:0px;
   }
   .sf-chat.active .chat-input{
     position: fixed;

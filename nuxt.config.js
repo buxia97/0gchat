@@ -60,7 +60,7 @@ export default {
     publicPath: '/style/'
   },
   env: {
-    baseUrl: 'http://127.0.0.6/',
-    serverUrl: 'http://127.0.0.6/',
+    baseUrl: '/',
+    serverUrl: '/',
   }
 }
