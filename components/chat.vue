@@ -277,6 +277,7 @@
         }
         that.msg = "";
         that.replyJson = null;
+        params.reply = null;
         that.$axios.$post(that.$api.sendMsg(),this.qs.stringify(data),{progress: false }).then(function (res) {
           if(res.code==1){
             that.getLastMsgs();

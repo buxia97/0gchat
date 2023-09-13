@@ -68,6 +68,7 @@
                     <span @click="statusChat(item,1)">开启</span>
                     </template>
                     <span style="color: #F56C6C;" @click="deleteChat(item)">删除</span>
+                    <span style="color: #67C23A;" @click="chatExcel(item)">导出聊天记录</span>
                   </div>
                 </div>
               </div>
@@ -94,7 +95,7 @@
         </div>
       </template>
       <template v-if="type==2">
-        
+
         <div class="system-ban">
           <div class="data-no" v-if="banList.length==0">
             <i class="el-icon-chat-dot-square"></i>
@@ -682,6 +683,13 @@
           })
         })
       },
+      chatExcel(item){
+        const that = this;
+        var chatid = item.id;
+        var token = that.token;
+        var url = that.$api.chatExcel(chatid,token);
+        window.open(url);
+      }
     }
   }
 </script>
